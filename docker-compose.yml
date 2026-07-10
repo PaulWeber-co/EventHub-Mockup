@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: eventhub-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: eventhub
+      POSTGRES_PASSWORD: eventhub_secret
+      POSTGRES_DB: eventhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eventhub -d eventhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-setup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: eventhub-db-setup
+    environment:
+      DATABASE_URL: "postgresql://eventhub:eventhub_secret@db:5432/eventhub?schema=public"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma db push --skip-generate && npx prisma db seed"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eventhub-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://eventhub:eventhub_secret@db:5432/eventhub?schema=public"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "docker-secret-key-change-in-production-32c!"
+      NEXT_PUBLIC_APP_NAME: "EventHub"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+    depends_on:
+      db-setup:
+        condition: service_completed_successfully
+
+volumes:
+  postgres_data:

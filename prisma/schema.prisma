@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  VISITOR
+  ORGANIZER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum EventCategory {
+  CONCERT
+  WORKSHOP
+  FESTIVAL
+  LECTURE
+  SPORTS
+  COMMUNITY
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PAYPAL
+  BANK_TRANSFER
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMED
+  EVENT_REMINDER
+  EVENT_CANCELLED
+  REFUND_PROCESSED
+  REVIEW_RECEIVED
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  name          String
+  avatarUrl     String?   @map("avatar_url")
+  role          Role      @default(VISITOR)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  organizedEvents Event[]        @relation("OrganizerEvents")
+  bookings        Booking[]
+  reviews         Review[]
+  notifications   Notification[]
+
+  @@map("users")
+}
+
+model Event {
+  id              String        @id @default(uuid())
+  organizerId     String        @map("organizer_id")
+  title           String
+  description     String
+  startDate       DateTime      @map("start_date")
+  endDate         DateTime      @map("end_date")
+  location        String
+  locationAddress String?       @map("location_address")
+  category        EventCategory
+  price           Decimal       @db.Decimal(10, 2)
+  capacity        Int
+  ticketsSold     Int           @default(0) @map("tickets_sold")
+  status          EventStatus   @default(DRAFT)
+  imageUrl        String?       @map("image_url")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  organizer       User          @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  bookings        Booking[]
+  reviews         Review[]
+  notifications   Notification[]
+
+  // Constraints: tickets_sold must never exceed capacity
+  @@index([status])
+  @@index([category])
+  @@index([startDate])
+  @@index([organizerId])
+  @@map("events")
+}
+
+model Booking {
+  id               String        @id @default(uuid())
+  userId           String        @map("user_id")
+  eventId          String        @map("event_id")
+  ticketCount      Int           @map("ticket_count")
+  totalPrice       Decimal       @db.Decimal(10, 2) @map("total_price")
+  status           BookingStatus @default(PENDING)
+  confirmationCode String        @unique @map("confirmation_code")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event            Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  payment          Payment?
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([confirmationCode])
+  @@map("bookings")
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  bookingId     String        @unique @map("booking_id")
+  amount        Decimal       @db.Decimal(10, 2)
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  transactionId String        @unique @map("transaction_id")
+  paidAt        DateTime?     @map("paid_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  // Relations
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  eventId   String   @map("event_id")
+  rating    Int      // 1-5
+  comment   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  // A user can only review an event once
+  @@unique([userId, eventId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  eventId   String?          @map("event_id")
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  // Relations
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event?           @relation(fields: [eventId], references: [id], onDelete: SetNull)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
