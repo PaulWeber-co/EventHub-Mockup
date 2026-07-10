@@ -102,15 +102,17 @@ export const categoryLabels: Record<string, string> = {
   OTHER: "Sonstiges",
 };
 
-/** Category icons (emoji) */
-export const categoryIcons: Record<string, string> = {
-  CONCERT: "🎵",
-  WORKSHOP: "🔧",
-  FESTIVAL: "🎪",
-  LECTURE: "🎤",
-  SPORTS: "⚽",
-  COMMUNITY: "🏘️",
-  OTHER: "📌",
+import { Music, Wrench, Tent, Mic, Dribbble, Users, Pin } from "lucide-react";
+
+/** Category icons (lucide-react) */
+export const categoryIcons: Record<string, any> = {
+  CONCERT: Music,
+  WORKSHOP: Wrench,
+  FESTIVAL: Tent,
+  LECTURE: Mic,
+  SPORTS: Dribbble,
+  COMMUNITY: Users,
+  OTHER: Pin,
 };
 
 /** Status display names */

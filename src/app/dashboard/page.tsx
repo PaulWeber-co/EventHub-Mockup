@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatPrice, formatDate, statusLabels, getCapacityPercent, getCapacityStatus } from "@/lib/utils";
+import { BarChart, Ticket } from "lucide-react";
 
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null);
@@ -52,8 +53,8 @@ export default function DashboardPage() {
         {/* Event Capacity */}
         <div className="card" style={{ cursor: "default" }}>
           <div className="card-body">
-            <h2 style={{ fontWeight: 700, fontSize: "1.125rem", marginBottom: "1.25rem" }}>
-              📊 Auslastung
+            <h2 style={{ fontWeight: 700, fontSize: "1.125rem", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <BarChart size={18} /> Auslastung
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {eventStats?.map((evt: any) => {
@@ -81,8 +82,8 @@ export default function DashboardPage() {
         {/* Recent Bookings */}
         <div className="card" style={{ cursor: "default" }}>
           <div className="card-body">
-            <h2 style={{ fontWeight: 700, fontSize: "1.125rem", marginBottom: "1.25rem" }}>
-              🎫 Letzte Buchungen
+            <h2 style={{ fontWeight: 700, fontSize: "1.125rem", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Ticket size={18} /> Letzte Buchungen
             </h2>
             {recentBookings?.length > 0 ? (
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>

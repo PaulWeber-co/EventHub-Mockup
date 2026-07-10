@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -74,7 +75,7 @@ export default function RegisterPage() {
         <h1 className="auth-title">Konto erstellen</h1>
         <p className="auth-subtitle">Registriere dich kostenlos bei EventHub</p>
 
-        {error && <div className="alert alert-error">⚠️ {error}</div>}
+        {error && <div className="alert alert-error" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><AlertTriangle size={16} /> {error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -104,8 +105,8 @@ export default function RegisterPage() {
           <div className="form-group">
             <label className="form-label" htmlFor="role">Ich möchte mich registrieren als</label>
             <select id="role" name="role" className="form-input form-select" required>
-              <option value="VISITOR">🎫 Besucher – Events finden & buchen</option>
-              <option value="ORGANIZER">🎪 Veranstalter – Events erstellen & verwalten</option>
+              <option value="VISITOR">Besucher – Events finden & buchen</option>
+              <option value="ORGANIZER">Veranstalter – Events erstellen & verwalten</option>
             </select>
           </div>
 

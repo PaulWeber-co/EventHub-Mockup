@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { Tent, Bell, CheckCircle, Clock, XCircle, CircleDollarSign } from "lucide-react";
 
 export function Header() {
   const { data: session } = useSession();
@@ -57,7 +58,7 @@ export function Header() {
     <header className="header">
       <div className="container header-inner">
         <Link href="/" className="header-logo">
-          <span className="header-logo-icon">🎪</span>
+          <span className="header-logo-icon" style={{ display: "flex", alignItems: "center" }}><Tent size={24} /></span>
           <span className="gradient-text">EventHub</span>
         </Link>
 
@@ -103,7 +104,7 @@ export function Header() {
                   onClick={() => setShowNotifications(!showNotifications)}
                   aria-label="Benachrichtigungen"
                 >
-                  🔔
+                  <Bell size={20} />
                   {unreadCount > 0 && <span className="notification-dot" />}
                 </button>
                 {showNotifications && (
@@ -134,12 +135,12 @@ export function Header() {
                             }}
                           >
                             {n.type === "BOOKING_CONFIRMED"
-                              ? "✅"
+                              ? <CheckCircle size={16} />
                               : n.type === "EVENT_REMINDER"
-                              ? "⏰"
+                              ? <Clock size={16} />
                               : n.type === "EVENT_CANCELLED"
-                              ? "❌"
-                              : "💰"}
+                              ? <XCircle size={16} />
+                              : <CircleDollarSign size={16} />}
                           </div>
                           <div className="notification-content">
                             <div className="notification-title">{n.title}</div>

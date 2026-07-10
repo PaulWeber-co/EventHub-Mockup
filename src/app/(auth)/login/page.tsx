@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { AlertTriangle, Beaker } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -39,7 +40,7 @@ function LoginForm() {
       <h1 className="auth-title">Willkommen zurück</h1>
       <p className="auth-subtitle">Melde dich an, um fortzufahren</p>
 
-      {error && <div className="alert alert-error">⚠️ {error}</div>}
+      {error && <div className="alert alert-error" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><AlertTriangle size={16} /> {error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -83,8 +84,8 @@ function LoginForm() {
       </div>
 
       <div style={{ marginTop: "1.5rem", padding: "1rem", background: "var(--bg-surface-hover)", borderRadius: "var(--radius-lg)", fontSize: "0.8rem" }}>
-        <div style={{ fontWeight: 600, marginBottom: "0.5rem", color: "var(--text-secondary)" }}>
-          🧪 Demo-Zugänge (Passwort: password123)
+        <div style={{ fontWeight: 600, marginBottom: "0.5rem", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+          <Beaker size={16} /> Demo-Zugänge (Passwort: password123)
         </div>
         <div style={{ color: "var(--text-muted)" }}>
           Admin: admin@eventhub.de<br />

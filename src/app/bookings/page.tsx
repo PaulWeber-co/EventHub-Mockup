@@ -6,6 +6,7 @@ import {
   formatPrice, formatDate, categoryLabels, categoryIcons,
   bookingStatusLabels, paymentStatusLabels,
 } from "@/lib/utils";
+import { Ticket, Calendar, MapPin } from "lucide-react";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -72,7 +73,7 @@ export default function BookingsPage() {
 
       {bookings.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🎫</div>
+          <div className="empty-state-icon" style={{ display: "flex", justifyContent: "center", color: "var(--text-muted)" }}><Ticket size={48} /></div>
           <h3 className="empty-state-title">Noch keine Buchungen</h3>
           <p className="empty-state-text">
             Entdecke spannende Events und buche deine ersten Tickets!
@@ -105,11 +106,11 @@ export default function BookingsPage() {
                       </Link>
                       <div className="event-card-meta" style={{ marginTop: "0.5rem" }}>
                         <div className="event-card-meta-item">
-                          <span className="event-card-meta-icon">📅</span>
+                          <span className="event-card-meta-icon"><Calendar size={14} /></span>
                           {formatDate(booking.event?.startDate)}
                         </div>
                         <div className="event-card-meta-item">
-                          <span className="event-card-meta-icon">📍</span>
+                          <span className="event-card-meta-icon"><MapPin size={14} /></span>
                           {booking.event?.location}
                         </div>
                       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Search, Ticket, PartyPopper, Calendar, MapPin, User } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { categoryLabels, categoryIcons, formatPrice, formatDate, getCapacityStatus, getCapacityPercent } from "@/lib/utils";
 
@@ -31,8 +32,8 @@ export default async function HomePage() {
             Buche sicher online und erlebe unvergessliche Momente.
           </p>
           <div className="hero-actions">
-            <Link href="/events" className="btn btn-primary btn-lg">
-              🔍 Events entdecken
+            <Link href="/events" className="btn btn-primary btn-lg" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <Search className="w-5 h-5" /> Events entdecken
             </Link>
             <Link href="/register" className="btn btn-secondary btn-lg">
               Kostenlos registrieren
@@ -68,6 +69,7 @@ export default async function HomePage() {
           {featuredEvents.map((event) => {
             const capacity = getCapacityStatus(event.ticketsSold, event.capacity);
             const percent = getCapacityPercent(event.ticketsSold, event.capacity);
+            const CategoryIcon = categoryIcons[event.category];
             return (
               <Link
                 key={event.id}
@@ -84,8 +86,8 @@ export default async function HomePage() {
                       />
                     )}
                     <span className="event-card-badge">
-                      <span className="badge badge-primary">
-                        {categoryIcons[event.category]} {categoryLabels[event.category]}
+                      <span className="badge badge-primary" style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                        <CategoryIcon size={14} /> {categoryLabels[event.category]}
                       </span>
                     </span>
                     <span className="event-card-price">
@@ -96,15 +98,15 @@ export default async function HomePage() {
                     <div className="event-card-title">{event.title}</div>
                     <div className="event-card-meta">
                       <div className="event-card-meta-item">
-                        <span className="event-card-meta-icon">📅</span>
+                        <span className="event-card-meta-icon"><Calendar size={14} /></span>
                         {formatDate(event.startDate)}
                       </div>
                       <div className="event-card-meta-item">
-                        <span className="event-card-meta-icon">📍</span>
+                        <span className="event-card-meta-icon"><MapPin size={14} /></span>
                         {event.location}
                       </div>
                       <div className="event-card-meta-item">
-                        <span className="event-card-meta-icon">👤</span>
+                        <span className="event-card-meta-icon"><User size={14} /></span>
                         {event.organizer.name}
                       </div>
                     </div>
@@ -145,21 +147,21 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-3 stagger">
             <div className="glass-card" style={{ padding: "2rem", textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔍</div>
+              <div style={{ color: "var(--accent-primary)", marginBottom: "1rem", display: "flex", justifyContent: "center" }}><Search size={48} /></div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Entdecken</h3>
               <p style={{ color: "var(--text-secondary)" }}>
                 Durchsuche hunderte regionale Veranstaltungen nach Kategorie, Datum und Ort.
               </p>
             </div>
             <div className="glass-card" style={{ padding: "2rem", textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎫</div>
+              <div style={{ color: "var(--accent-primary)", marginBottom: "1rem", display: "flex", justifyContent: "center" }}><Ticket size={48} /></div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Buchen</h3>
               <p style={{ color: "var(--text-secondary)" }}>
                 Sichere dir Tickets für deine Lieblings-Events – einfach, schnell und sicher.
               </p>
             </div>
             <div className="glass-card" style={{ padding: "2rem", textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎉</div>
+              <div style={{ color: "var(--accent-primary)", marginBottom: "1rem", display: "flex", justifyContent: "center" }}><PartyPopper size={48} /></div>
               <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Erleben</h3>
               <p style={{ color: "var(--text-secondary)" }}>
                 Erlebe unvergessliche Momente und teile deine Erfahrungen mit der Community.

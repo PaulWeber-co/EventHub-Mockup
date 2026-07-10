@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { categoryLabels, categoryIcons, formatPrice, formatDate, getCapacityStatus, getCapacityPercent } from "@/lib/utils";
 
+import { Search, Calendar, MapPin, User, Target } from "lucide-react";
+
 const categories = [
-  { value: "ALL", label: "Alle Kategorien", icon: "🎯" },
-  { value: "CONCERT", label: "Konzert", icon: "🎵" },
-  { value: "WORKSHOP", label: "Workshop", icon: "🔧" },
-  { value: "FESTIVAL", label: "Festival", icon: "🎪" },
-  { value: "LECTURE", label: "Vortrag", icon: "🎤" },
-  { value: "SPORTS", label: "Sport", icon: "⚽" },
-  { value: "COMMUNITY", label: "Vereinsfest", icon: "🏘️" },
-  { value: "OTHER", label: "Sonstiges", icon: "📌" },
+  { value: "ALL", label: "Alle Kategorien", icon: Target },
+  { value: "CONCERT", label: "Konzert", icon: categoryIcons.CONCERT },
+  { value: "WORKSHOP", label: "Workshop", icon: categoryIcons.WORKSHOP },
+  { value: "FESTIVAL", label: "Festival", icon: categoryIcons.FESTIVAL },
+  { value: "LECTURE", label: "Vortrag", icon: categoryIcons.LECTURE },
+  { value: "SPORTS", label: "Sport", icon: categoryIcons.SPORTS },
+  { value: "COMMUNITY", label: "Vereinsfest", icon: categoryIcons.COMMUNITY },
+  { value: "OTHER", label: "Sonstiges", icon: categoryIcons.OTHER },
 ];
 
 const dateFilters = [
@@ -77,7 +79,7 @@ export default function EventsPage() {
       {/* Search */}
       <div className="search-bar">
         <div className="search-input-wrapper">
-          <span className="search-input-icon">🔍</span>
+          <span className="search-input-icon"><Search size={18} /></span>
           <input
             type="text"
             className="search-input"
@@ -95,8 +97,9 @@ export default function EventsPage() {
             key={cat.value}
             className={`filter-chip ${category === cat.value ? "active" : ""}`}
             onClick={() => setCategory(cat.value)}
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}
           >
-            {cat.icon} {cat.label}
+            <cat.icon size={16} /> {cat.label}
           </button>
         ))}
       </div>
@@ -121,7 +124,7 @@ export default function EventsPage() {
         </div>
       ) : events.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🔍</div>
+          <div className="empty-state-icon" style={{ display: "flex", justifyContent: "center", color: "var(--text-muted)" }}><Search size={48} /></div>
           <h3 className="empty-state-title">Keine Events gefunden</h3>
           <p className="empty-state-text">
             Versuche andere Suchbegriffe oder Filter.
@@ -143,6 +146,7 @@ export default function EventsPage() {
           {events.map((event) => {
             const capacity = getCapacityStatus(event.ticketsSold, event.capacity);
             const percent = getCapacityPercent(event.ticketsSold, event.capacity);
+            const CategoryIcon = categoryIcons[event.category];
             return (
               <Link
                 key={event.id}
@@ -159,8 +163,8 @@ export default function EventsPage() {
                       />
                     )}
                     <span className="event-card-badge">
-                      <span className="badge badge-primary">
-                        {categoryIcons[event.category]} {categoryLabels[event.category]}
+                      <span className="badge badge-primary" style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                        <CategoryIcon size={14} /> {categoryLabels[event.category]}
                       </span>
                     </span>
                     <span className="event-card-price">
@@ -171,16 +175,16 @@ export default function EventsPage() {
                     <div className="event-card-title">{event.title}</div>
                     <div className="event-card-meta">
                       <div className="event-card-meta-item">
-                        <span className="event-card-meta-icon">📅</span>
+                        <span className="event-card-meta-icon"><Calendar size={14} /></span>
                         {formatDate(event.startDate)}
                       </div>
                       <div className="event-card-meta-item">
-                        <span className="event-card-meta-icon">📍</span>
+                        <span className="event-card-meta-icon"><MapPin size={14} /></span>
                         {event.location}
                       </div>
                       {event.organizer && (
                         <div className="event-card-meta-item">
-                          <span className="event-card-meta-icon">👤</span>
+                          <span className="event-card-meta-icon"><User size={14} /></span>
                           {event.organizer.name}
                         </div>
                       )}

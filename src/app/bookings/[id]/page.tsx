@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatPrice, formatDate, bookingStatusLabels, paymentStatusLabels, categoryLabels, categoryIcons } from "@/lib/utils";
+import { CreditCard, Wallet, Landmark } from "lucide-react";
 
 export default function BookingDetailPage({ params }: { params: { id: string } }) {
   const [booking, setBooking] = useState<any>(null);
@@ -93,8 +94,9 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
               <div>
                 <div style={{ color: "var(--text-muted)", marginBottom: "0.25rem" }}>Methode</div>
                 <div style={{ fontWeight: 600 }}>
-                  {booking.payment.method === "CREDIT_CARD" ? "💳 Kreditkarte" :
-                   booking.payment.method === "PAYPAL" ? "🅿️ PayPal" : "🏦 Überweisung"}
+                  {booking.payment.method === "CREDIT_CARD" ? <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}><CreditCard size={14} /> Kreditkarte</span> :
+                   booking.payment.method === "PAYPAL" ? <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}><Wallet size={14} /> PayPal</span> : 
+                   <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}><Landmark size={14} /> Überweisung</span>}
                 </div>
               </div>
               <div>

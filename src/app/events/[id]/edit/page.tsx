@@ -3,14 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+import { AlertTriangle, Rocket, Edit, XCircle, Save } from "lucide-react";
+
 const categories = [
-  { value: "CONCERT", label: "🎵 Konzert" },
-  { value: "WORKSHOP", label: "🔧 Workshop" },
-  { value: "FESTIVAL", label: "🎪 Festival" },
-  { value: "LECTURE", label: "🎤 Vortrag" },
-  { value: "SPORTS", label: "⚽ Sport" },
-  { value: "COMMUNITY", label: "🏘️ Vereinsfest" },
-  { value: "OTHER", label: "📌 Sonstiges" },
+  { value: "CONCERT", label: "Konzert" },
+  { value: "WORKSHOP", label: "Workshop" },
+  { value: "FESTIVAL", label: "Festival" },
+  { value: "LECTURE", label: "Vortrag" },
+  { value: "SPORTS", label: "Sport" },
+  { value: "COMMUNITY", label: "Vereinsfest" },
+  { value: "OTHER", label: "Sonstiges" },
 ];
 
 export default function EditEventPage({ params }: { params: { id: string } }) {
@@ -93,24 +95,24 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
         <h1 className="page-title">Event <span className="gradient-text">bearbeiten</span></h1>
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
           {event.status === "DRAFT" && (
-            <button className="btn btn-primary btn-sm" onClick={() => handleStatusChange("PUBLISHED")}>
-              🚀 Veröffentlichen
+            <button className="btn btn-primary btn-sm" onClick={() => handleStatusChange("PUBLISHED")} style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+              <Rocket size={16} /> Veröffentlichen
             </button>
           )}
           {event.status === "PUBLISHED" && (
             <>
-              <button className="btn btn-secondary btn-sm" onClick={() => handleStatusChange("DRAFT")}>
-                📝 Zurückziehen
+              <button className="btn btn-secondary btn-sm" onClick={() => handleStatusChange("DRAFT")} style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                <Edit size={16} /> Zurückziehen
               </button>
-              <button className="btn btn-danger btn-sm" onClick={() => handleStatusChange("CANCELLED")}>
-                ❌ Absagen
+              <button className="btn btn-danger btn-sm" onClick={() => handleStatusChange("CANCELLED")} style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                <XCircle size={16} /> Absagen
               </button>
             </>
           )}
         </div>
       </div>
 
-      {error && <div className="alert alert-error">⚠️ {error}</div>}
+      {error && <div className="alert alert-error" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><AlertTriangle size={16} /> {error}</div>}
 
       <div className="card">
         <div className="card-body">
@@ -163,7 +165,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
             </div>
             <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
               <button type="submit" className="btn btn-primary btn-lg" disabled={saving}>
-                {saving ? "Speichern..." : "💾 Änderungen speichern"}
+                {saving ? "Speichern..." : <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}><Save size={20} /> Änderungen speichern</span>}
               </button>
               <button type="button" className="btn btn-secondary btn-lg" onClick={() => router.back()}>
                 Abbrechen

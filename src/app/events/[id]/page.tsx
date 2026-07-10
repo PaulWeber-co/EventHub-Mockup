@@ -8,6 +8,11 @@ import {
   formatPrice, formatDate, formatDateShort, categoryLabels, categoryIcons,
   getCapacityStatus, getCapacityPercent, statusLabels,
 } from "@/lib/utils";
+import { 
+  Frown, PartyPopper, AlertTriangle, Tent, Calendar, 
+  MapPin, User, BarChart, Clock, XCircle, 
+  CreditCard, Wallet, Landmark, Ticket 
+} from "lucide-react";
 
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const { data: session } = useSession();
@@ -117,7 +122,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
     return (
       <div className="container page-content">
         <div className="empty-state">
-          <div className="empty-state-icon">😔</div>
+          <div className="empty-state-icon" style={{ display: "flex", justifyContent: "center", color: "var(--text-muted)" }}><Frown size={48} /></div>
           <h3 className="empty-state-title">Event nicht gefunden</h3>
           <Link href="/events" className="btn btn-primary">Zurück zu Events</Link>
         </div>
@@ -138,7 +143,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
     return (
       <div className="container">
         <div className="confirmation animate-fade-in">
-          <div className="confirmation-icon">🎉</div>
+          <div className="confirmation-icon" style={{ display: "flex", justifyContent: "center", color: "var(--accent-primary)" }}><PartyPopper size={48} /></div>
           <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "0.5rem" }}>
             Buchung bestätigt!
           </h1>
@@ -170,9 +175,14 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
           <img src={event.imageUrl} alt={event.title} className="event-detail-image" />
         )}
         <div className="event-detail-overlay">
-          <span className="badge badge-primary" style={{ marginBottom: "0.75rem" }}>
-            {categoryIcons[event.category]} {categoryLabels[event.category]}
-          </span>
+          {(() => {
+            const CategoryIcon = categoryIcons[event.category] || categoryIcons.OTHER;
+            return (
+              <span className="badge badge-primary" style={{ marginBottom: "0.75rem", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                <CategoryIcon size={14} /> {categoryLabels[event.category]}
+              </span>
+            );
+          })()}
           <h1 style={{ fontSize: "2.5rem", fontWeight: 800, lineHeight: 1.2 }}>
             {event.title}
           </h1>
@@ -189,15 +199,15 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
         </div>
       </div>
 
-      {error && <div className="alert alert-error">⚠️ {error}</div>}
+      {error && <div className="alert alert-error" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><AlertTriangle size={16} /> {error}</div>}
 
       <div className="event-detail-grid">
         {/* Main Content */}
         <div className="event-detail-info">
           {/* Organizer Actions */}
           {isOrganizer && (
-            <div className="alert alert-info">
-              🎪 Du bist der Veranstalter dieses Events.
+            <div className="alert alert-info" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Tent size={16} /> Du bist der Veranstalter dieses Events.
               <Link href={`/events/${params.id}/edit`} className="btn btn-sm btn-secondary" style={{ marginLeft: "auto" }}>
                 Bearbeiten
               </Link>
@@ -212,14 +222,14 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                 <div className="event-info-row">
-                  <div className="event-info-icon">📅</div>
+                  <div className="event-info-icon"><Calendar size={20} /></div>
                   <div>
                     <div className="event-info-label">Datum & Uhrzeit</div>
                     <div className="event-info-value">{formatDate(event.startDate)}</div>
                   </div>
                 </div>
                 <div className="event-info-row">
-                  <div className="event-info-icon">📍</div>
+                  <div className="event-info-icon"><MapPin size={20} /></div>
                   <div>
                     <div className="event-info-label">Veranstaltungsort</div>
                     <div className="event-info-value">{event.location}</div>
@@ -231,14 +241,14 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                   </div>
                 </div>
                 <div className="event-info-row">
-                  <div className="event-info-icon">👤</div>
+                  <div className="event-info-icon"><User size={20} /></div>
                   <div>
                     <div className="event-info-label">Veranstalter</div>
                     <div className="event-info-value">{event.organizer?.name}</div>
                   </div>
                 </div>
                 <div className="event-info-row">
-                  <div className="event-info-icon">📊</div>
+                  <div className="event-info-icon"><BarChart size={20} /></div>
                   <div>
                     <div className="event-info-label">Auslastung</div>
                     <div className="event-info-value">
@@ -362,12 +372,12 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
             </div>
 
             {isPast ? (
-              <div className="alert alert-warning" style={{ marginBottom: 0 }}>
-                ⏰ Dieses Event hat bereits stattgefunden
+              <div className="alert alert-warning" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Clock size={16} /> Dieses Event hat bereits stattgefunden
               </div>
             ) : capacity.variant === "sold-out" ? (
-              <div className="alert alert-error" style={{ marginBottom: 0 }}>
-                ❌ Dieses Event ist ausverkauft
+              <div className="alert alert-error" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <XCircle size={16} /> Dieses Event ist ausverkauft
               </div>
             ) : !session ? (
               <div>
@@ -379,8 +389,8 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                 </Link>
               </div>
             ) : isOrganizer ? (
-              <div className="alert alert-info" style={{ marginBottom: 0 }}>
-                🎪 Du bist der Veranstalter
+              <div className="alert alert-info" style={{ marginBottom: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Tent size={16} /> Du bist der Veranstalter
               </div>
             ) : (
               <>
@@ -411,9 +421,9 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                   <label className="form-label">Zahlungsmethode</label>
                   <div className="payment-methods">
                     {[
-                      { value: "CREDIT_CARD", icon: "💳", name: "Kreditkarte", desc: "Visa, Mastercard" },
-                      { value: "PAYPAL", icon: "🅿️", name: "PayPal", desc: "Schnell & sicher" },
-                      { value: "BANK_TRANSFER", icon: "🏦", name: "Überweisung", desc: "Banküberweisung" },
+                      { value: "CREDIT_CARD", icon: <CreditCard size={20} />, name: "Kreditkarte", desc: "Visa, Mastercard" },
+                      { value: "PAYPAL", icon: <Wallet size={20} />, name: "PayPal", desc: "Schnell & sicher" },
+                      { value: "BANK_TRANSFER", icon: <Landmark size={20} />, name: "Überweisung", desc: "Banküberweisung" },
                     ].map((method) => (
                       <div
                         key={method.value}
@@ -457,7 +467,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                   {booking ? (
                     <><span className="spinner" /> Wird gebucht...</>
                   ) : (
-                    `🎫 ${ticketCount} Ticket${ticketCount > 1 ? "s" : ""} buchen`
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}><Ticket size={18} /> {ticketCount} Ticket{ticketCount > 1 ? "s" : ""} buchen</span>
                   )}
                 </button>
 

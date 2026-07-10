@@ -72,7 +72,7 @@ export async function POST(request: Request) {
           userId: event.organizerId,
           eventId,
           type: "REVIEW_RECEIVED",
-          title: "Neue Bewertung ⭐",
+          title: "Neue Bewertung",
           message: `Dein Event "${event.title}" hat eine neue ${rating}-Sterne Bewertung erhalten.`,
         },
       });

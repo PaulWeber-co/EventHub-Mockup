@@ -4,14 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+import { AlertTriangle, Rocket, Save } from "lucide-react";
+
 const categories = [
-  { value: "CONCERT", label: "🎵 Konzert" },
-  { value: "WORKSHOP", label: "🔧 Workshop" },
-  { value: "FESTIVAL", label: "🎪 Festival" },
-  { value: "LECTURE", label: "🎤 Vortrag" },
-  { value: "SPORTS", label: "⚽ Sport" },
-  { value: "COMMUNITY", label: "🏘️ Vereinsfest" },
-  { value: "OTHER", label: "📌 Sonstiges" },
+  { value: "CONCERT", label: "Konzert" },
+  { value: "WORKSHOP", label: "Workshop" },
+  { value: "FESTIVAL", label: "Festival" },
+  { value: "LECTURE", label: "Vortrag" },
+  { value: "SPORTS", label: "Sport" },
+  { value: "COMMUNITY", label: "Vereinsfest" },
+  { value: "OTHER", label: "Sonstiges" },
 ];
 
 export default function CreateEventPage() {
@@ -72,7 +74,7 @@ export default function CreateEventPage() {
         </p>
       </div>
 
-      {error && <div className="alert alert-error">⚠️ {error}</div>}
+      {error && <div className="alert alert-error" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}><AlertTriangle size={16} /> {error}</div>}
 
       <div className="card">
         <div className="card-body">
@@ -170,7 +172,7 @@ export default function CreateEventPage() {
                 data-status="PUBLISHED"
                 disabled={loading}
               >
-                {loading ? "Wird erstellt..." : "🚀 Veröffentlichen"}
+                {loading ? "Wird erstellt..." : <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}><Rocket size={20} /> Veröffentlichen</span>}
               </button>
               <button
                 type="submit"
@@ -178,7 +180,7 @@ export default function CreateEventPage() {
                 data-status="DRAFT"
                 disabled={loading}
               >
-                💾 Als Entwurf speichern
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}><Save size={20} /> Als Entwurf speichern</span>
               </button>
             </div>
           </form>
